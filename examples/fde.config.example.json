@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "defaultProject": "demo",
+  "projects": {
+    "demo": {
+      "mode": "demo",
+      "workspace": "~/demos/client-poc",
+      "sshHost": "demo-host",
+      "remotePath": "/home/user/client-poc",
+      "service": "client-poc.service",
+      "backupPath": "/home/user/client-poc-backups",
+      "uploadsPath": "/home/user/client-poc-data/uploads",
+      "database": "demo",
+      "healthUrl": "https://demo.example.com/api/health",
+      "sync": {
+        "delete": false,
+        "exclude": []
+      }
+    }
+  }
+}

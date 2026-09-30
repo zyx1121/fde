@@ -1,0 +1,33 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "fde",
+  "version": "0.1.0",
+  "description": "Agent-driven client POCs: shared skills, MCP tools, and scripts for live demo environments.",
+  "author": {
+    "name": "zyx1121",
+    "url": "https://github.com/zyx1121"
+  },
+  "repository": "https://github.com/zyx1121/fde",
+  "license": "MIT",
+  "keywords": [
+    "fde",
+    "poc",
+    "mcp",
+    "codex",
+    "claude-code"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "FDE",
+        "shortDescription": "Build and operate live client POCs",
+        "developerName": "zyx1121",
+        "category": "Developer Tools",
+        "capabilities": [
+          "Read",
+          "Write"
+        ]
+      }
+    }
+  }
+}
