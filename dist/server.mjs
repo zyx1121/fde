@@ -36732,7 +36732,10 @@ async function operate(operation, args = {}, env = process.env) {
     if (args.dryRun) argv.push("--dry-run");
     for (const pattern of [...PROTECTED, ...p.sync.exclude]) argv.push("--exclude=" + pattern);
     argv.push("--", workspace + "/", p.sshHost + ":" + quote(p.remotePath + "/"));
-    const { stdout } = await run("rsync", argv, { timeout: 18e4, env });
+    const { stdout } = await run("rsync", argv, {
+      timeout: 18e4,
+      env: { ...env, RSYNC_OLD_ARGS: "1", RSYNC_PROTECT_ARGS: "0" }
+    });
     const changes = stdout.trim().split("\n").filter(Boolean);
     return {
       ok: true,

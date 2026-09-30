@@ -61,7 +61,10 @@ export async function operate(operation, args={}, env=process.env) {
     if (args.dryRun) argv.push('--dry-run');
     for (const pattern of [...PROTECTED, ...p.sync.exclude]) argv.push('--exclude=' + pattern);
     argv.push('--', workspace + '/', p.sshHost + ':' + quote(p.remotePath + '/'));
-    const {stdout} = await run('rsync', argv, {timeout:180000, env});
+    // Quote the remote path ourselves for macOS rsync 2.x. Newer rsync must
+    // not escape those quotes a second time; all other arguments are fixed.
+    const {stdout} = await run('rsync', argv, {timeout:180000,
+      env:{...env, RSYNC_OLD_ARGS:'1', RSYNC_PROTECT_ARGS:'0'}});
     const changes = stdout.trim().split('\n').filter(Boolean);
     return {ok:true, operation, project:p.name, dryRun:args.dryRun ?? false,
       mirror:p.sync.delete, changes:changes.slice(0, 200), truncated:changes.length > 200};
