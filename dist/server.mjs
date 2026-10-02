@@ -36755,7 +36755,7 @@ async function operate(operation, args = {}, env = process.env) {
 var plugin_default = {
   $schema: "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   name: "fde",
-  version: "0.1.0",
+  version: "0.1.1",
   description: "Agent-driven client POCs: shared skills, MCP tools, and scripts for live demo environments.",
   author: {
     name: "zyx1121",

@@ -60,3 +60,10 @@ Claude Code 的 plugin skill 為 `/fde:fde`。
 
 從舊本機 FDE skill 遷移時，先驗證新 plugin，再將舊 skill 與 symlink
 移出自動探索目錄並備份，避免重複路由。原有 `zyx@zyx` 不需移除。
+
+## Personal task templates
+
+[Task Web](https://github.com/zyx1121/task-web) provides a clean personal web starter
+and the fixed-corner zyx shell. FDE handles the configured environment, sync and
+snapshots. Install task-web separately when needed; FDE preserves existing client
+designs and has no mandatory template dependency.
