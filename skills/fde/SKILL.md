@@ -25,6 +25,14 @@ current demo requires that intent in the request. Local source is authoritative;
 remote dependency installs may change manifests or generated components, which must
 be retrieved before the next sync. Never overwrite the remote environment file.
 
+## Presentation and templates
+
+FDE owns environment operations, not a mandatory page template. For a personal
+tool, temporary interactive page or research demo, use the separate task-web
+plugin when available. It supplies the zyx shell and a clean starter; FDE handles
+configured workspace status, sync and snapshots. A client design or an existing
+project shell takes precedence. No task-web dependency is required for FDE.
+
 ## Live demo
 
 Use the main context for the small requested change, edit locally, and sync with
