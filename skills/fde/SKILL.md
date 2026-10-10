@@ -50,6 +50,12 @@ states. Avoid decorative labels, repeated instructions and permanent limit copy.
 Reuse actual installed components and inspect their exports. If the project uses
 the zyx/shadcn starter, read [composition notes](references/components.md) as needed.
 
+A dev server never prefetches links and compiles each page on its first visit,
+so it feels slower than the finished product. Before a client or another person
+uses the demo, switch the workspace to its production mode when it has one
+(dev.zyx.tw: `scripts/demo show`), and back to its edit mode before the next
+change (`scripts/demo edit`). Report which mode the demo is left in.
+
 A sync doesn't restart stopped services. If startup or dependency/config changes
 require a service action, use the workspace's documented lifecycle script within
 the requested task. Scope it to this project's service.
@@ -60,6 +66,14 @@ Use parameterized queries and preserve existing data when seeding. Protect
 sensitive pages, server actions and API routes with real server authorization;
 a cookie-presence redirect isn't sufficient. Respect the app's selected login
 mode and credentials. Do not rotate accounts as a side effect of deployment.
+
+For an agent in the demo (chat with tools, an MCP endpoint, stored credentials,
+the server fetching URLs), install the ui.zyx.tw agent kit items instead of
+writing those parts again: `agent-tools` (one tool registry for the page, the
+chat and MCP), `agent-model`, `agent-seal`, `agent-public-fetch` and
+`agent-telemetry`; see the Agent kit section of the ui.zyx.tw DESIGN.md. A
+page action that an agent should also take becomes a tool and the page calls it
+through the registry.
 
 Keep keys on the server and uploads in the configured persistent directory.
 Successful file storage does not imply extraction or AI processing. Distinguish
