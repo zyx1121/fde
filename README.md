@@ -1,69 +1,101 @@
-# FDE
+<div align="center">
 
-用自然語言操作客戶 POC 的 plugin，同時支援 Codex 與 Claude Code。
-FDE 是 Forward Deployed Engineer，也代表 Fastest Development Environment。
+<h1>FDE</h1>
 
-> 用 FDE 幫我把目前的 demo 改成 light theme，完成後同步。
+<p><strong>Change a live client POC by asking your agent, then sync it safely.</strong></p>
 
-Skill 負責工作流程，MCP tools 提供操作介面，scripts 執行實際工作。
-你不需要手動操作 CLI。
+[![CI](https://img.shields.io/github/actions/workflow/status/zyx1121/fde/check.yml?branch=main&style=flat-square&label=CI)](https://github.com/zyx1121/fde/actions)
+[![Claude Code](https://img.shields.io/badge/Claude_Code-plugin-D97757?style=flat-square)](https://github.com/zyx1121/marketplace)
+[![License](https://img.shields.io/github/license/zyx1121/fde?style=flat-square)](LICENSE)
 
-## 第一版範圍
+**English** | [繁體中文](README.zh-TW.md) | [简体中文](README.zh-CN.md)
 
-- 接上已存在的 Next.js／Node demo workspace。
-- 查詢服務、PostgreSQL 與 HTTP health 狀態。
-- 同步本機程式到 demo；保護環境檔與持久資料。
-- 保存遠端 source、資料庫、uploads 與 SHA-256 備份清單。
-- 保留專案既有的 theme、導覽列、帳密與登入設定。
+</div>
 
-本版不建立 VM、不提供乾淨 app scaffold，也尚未實作自動 promotion 或背景
-job 工具。正式部署沿用專案自己的部署流程；FDE 不依賴整包 zyx/utils。
+> Use FDE to switch the current demo to a light theme, and sync it when you finish.
 
-## 安裝
+FDE stands for Forward Deployed Engineer, and also for Fastest Development Environment. It lets Codex and Claude Code work on a client demo that already runs. The skill holds the workflow, 3 MCP tools do the work, and you never type a CLI command.
 
-請 agent 從 `zyx1121/marketplace` 安裝 `fde`。目前 CLI 也可使用：
+## Features
+
+- **Reads the demo's health**: the systemd service, PostgreSQL and the HTTP health URL, without changing anything.
+- **Syncs your code**: rsync over SSH, which protects `.env` files, dependencies, build output and persistent data.
+- **Takes snapshots**: the deployed source, the database and the uploads, with SHA-256 checksums.
+- **Keeps the client's design**: the theme, navigation, accounts and login settings stay as the project has them.
+
+## Quick start
 
 ```sh
-# Claude Code
 claude plugin marketplace add zyx1121/marketplace
 claude plugin install fde@zyx1121
-
-# Codex（支援 plugin add 的版本）
-codex plugin marketplace add zyx1121/marketplace
-codex plugin add fde@zyx1121
 ```
 
-安裝後開新對話，使用 FDE 技能。Codex 可用 `$fde`；
-Claude Code 的 plugin skill 為 `/fde:fde`。
+Codex: `codex plugin marketplace add zyx1121/marketplace`, then `codex plugin add fde@zyx1121`.
 
-需要 Node.js 22+、SSH 與 rsync。MCP server 已打包在 dist，
-安裝 plugin 不需要 npm install。遠端需求與操作限制見
-[環境操作說明](skills/fde/references/operations.md)。
+Copy [examples/fde.config.example.json](examples/fde.config.example.json) to `~/.config/fde/config.json` and set your workspace, SSH alias and service. Open a new session and use the skill: `/fde:fde` in Claude Code or `$fde` in Codex. Ask "What is the status of the demo?".
 
-請 agent 依 [設定範例](examples/fde.config.example.json) 建立本機
-`~/.config/fde/config.json`，填入 workspace、SSH alias 與服務資訊。
-也支援 XDG_CONFIG_HOME 或 FDE_CONFIG_PATH。設定、SSH keys、runtime state
-與客戶資料不放進 plugin repo，也不存進會隨升級更換的 plugin cache。
+The plugin needs Node.js 22 or later, SSH and rsync. The MCP server ships bundled in `dist/`.
 
-## 結構與維護
+## Usage
 
-- `plugin.json`、`mcp.json`：可攜 manifest，唯一套件資訊來源。
-- `.claude-plugin/plugin.json`、`.mcp.json`：build 產生的相容格式。
-- `skills/fde/`：兩個工具共用的技能。
-- `scripts/lib/`：MCP 與 scripts fallback 共用的實作。
-- `dist/server.mjs`：已打包 MCP server，無安裝期下載或 build。
+| Tool | Does | Changes |
+|------|------|---------|
+| `fde_status` | reads the workspace, the service, PostgreSQL and HTTP health | nothing |
+| `fde_sync` | copies local source to the demo over SSH and rsync | remote source. It deletes remote files only when `sync.delete` is on |
+| `fde_snapshot` | backs up the deployed source, the database and the uploads | a new private snapshot directory on the remote |
 
-維護者以 Node.js 22+ 執行 `npm ci`、`npm run check`。
-修改後一起提交生成的 manifests 與 dist；CI 檢查它們沒有過期。
-套件版號在 plugin.json 與 package.json 保持一致，發佈後由 marketplace
-固定到 release commit。詳見 [拆分決策](docs/architecture.md)。
+Each tool takes an optional `project`. Without it, the tools use `defaultProject` from the profile. The remote requirements and limits are in [skills/fde/references/operations.md](skills/fde/references/operations.md).
 
-從舊本機 FDE skill 遷移時，先驗證新 plugin，再將舊 skill 與 symlink
-移出自動探索目錄並備份，避免重複路由。原有 `zyx@zyx` 不需移除。
+For a personal page with the zyx shell, install [task-web](https://github.com/zyx1121/task-web). FDE has no template dependency.
 
-## Personal task templates
+## Configuration
 
-[Task Web](https://github.com/zyx1121/task-web) provides a clean personal web starter
-and the fixed-corner zyx shell. FDE handles the configured environment, sync and
-snapshots. Install task-web separately when needed; FDE preserves existing client
-designs and has no mandatory template dependency.
+`~/.config/fde/config.json` holds one entry per project. `FDE_CONFIG_PATH` and `XDG_CONFIG_HOME` move it.
+
+| Key | Sets |
+|-----|------|
+| `workspace` | the local source directory |
+| `sshHost`, `remotePath` | the SSH alias and the remote directory |
+| `service` | the systemd unit |
+| `database`, `uploadsPath`, `backupPath` | what a snapshot copies, and where it writes |
+| `healthUrl` | the URL that `fde_status` requests |
+| `sync.delete`, `sync.exclude` | whether sync deletes remote files, and what it skips |
+
+The profile, SSH keys, runtime state and client data stay out of this repo and out of the plugin cache.
+
+## How it works
+
+The skill decides the steps. The MCP server (`dist/server.mjs`) runs each operation from `scripts/lib/`, which works over SSH. A snapshot copies the source, the database and the uploads one after another, so it is not atomic.
+
+## Limits
+
+- FDE does not create VMs or scaffold a new app.
+- It does not promote a demo to production. Each project keeps its own deploy flow.
+- A snapshot is sequential, not atomic.
+
+## For AI agents
+
+Facts for coding agents and LLM tools. The rules for changing the code are in [AGENTS.md](AGENTS.md).
+
+- **Summary**: Plugin with a skill and 3 MCP tools that read, sync and snapshot a running Next.js or Node client demo over SSH.
+- **Type**: plugin
+- **Interfaces**: MCP `fde` (stdio, `dist/server.mjs`) with `fde_status`, `fde_sync`, `fde_snapshot`. Skill `fde`.
+- **Install**: `claude plugin install fde@zyx1121`, after `claude plugin marketplace add zyx1121/marketplace`
+- **Run**: the host starts the MCP server
+- **Verify**: call `fde_status` and expect the service and health results
+- **Config**: `~/.config/fde/config.json`, `FDE_CONFIG_PATH`
+- **Secrets**: none in the plugin. SSH keys stay in SSH config, and the remote `.env` stays on the remote.
+- **Limits**: no VM creation, no scaffold, no promotion. Snapshots are not atomic.
+
+## Development
+
+```sh
+npm ci
+npm run check
+```
+
+`plugin.json` and `mcp.json` are the manifest sources. The build writes the Claude-compatible files and `dist/server.mjs`, and CI fails when the committed copies are stale. [docs/architecture.md](docs/architecture.md) records why FDE is its own plugin.
+
+## License
+
+[MIT](LICENSE)
