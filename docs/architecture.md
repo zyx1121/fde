@@ -18,8 +18,8 @@ The first version supports status, sync and snapshot. The scripts fallback uses
 the same operation functions as MCP. Tool schemas carry parameter semantics;
 skill references carry workflow decisions rather than a second tool manual.
 
-Clean personal app templates live in the independent [task-web](https://github.com/zyx1121/task-web)
-plugin. FDE consumes existing workspaces and preserves their selected design; it
+Clean personal app templates live in the ui.zyx.tw `task` starter and the `task-web` skill of the [zyx plugin](https://github.com/zyx1121/plugin).
+FDE consumes existing workspaces and preserves their selected design; it
 does not require task-web or impose a template on client projects.
 
 Deferred: automatic promotion, durable job

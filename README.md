@@ -46,7 +46,7 @@ The plugin needs Node.js 22 or later, SSH and rsync. The MCP server ships bundle
 
 Each tool takes an optional `project`. Without it, the tools use `defaultProject` from the profile. The remote requirements and limits are in [skills/fde/references/operations.md](skills/fde/references/operations.md).
 
-For a personal page with the zyx shell, install [task-web](https://github.com/zyx1121/task-web). FDE has no template dependency.
+For a personal page with the zyx shell, use the `task-web` skill in the [zyx plugin](https://github.com/zyx1121/plugin). FDE has no template dependency.
 
 ## Configuration
 

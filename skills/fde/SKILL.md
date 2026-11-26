@@ -28,8 +28,8 @@ be retrieved before the next sync. Never overwrite the remote environment file.
 ## Presentation and templates
 
 FDE owns environment operations, not a mandatory page template. For a personal
-tool, temporary interactive page or research demo, use the separate task-web
-plugin when available. It supplies the zyx shell and a clean starter; FDE handles
+tool, temporary interactive page or research demo, use the task-web skill
+of the zyx plugin when available. It makes the ui.zyx.tw starter; FDE handles
 configured workspace status, sync and snapshots. A client design or an existing
 project shell takes precedence. No task-web dependency is required for FDE.
 
