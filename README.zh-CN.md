@@ -48,7 +48,7 @@ Codex：先 `codex plugin marketplace add zyx1121/marketplace`，再 `codex plug
 
 每个工具都可以带 `project`，不带就用配置文件的 `defaultProject`。远端要求和限制写在 [skills/fde/references/operations.md](skills/fde/references/operations.md)。
 
-要做带 zyx 外框的个人页面，另外安装 [task-web](https://github.com/zyx1121/task-web)。FDE 不依赖任何模板。
+要做带 zyx 外框的个人页面，用 [zyx plugin](https://github.com/zyx1121/plugin) 的 `task-web` skill。FDE 不依赖任何模板。
 
 ## 配置
 
